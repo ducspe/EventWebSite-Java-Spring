@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layouts/main">
+<head>
+
+
+<title>Post List</title>
+
+<!--
+	<th:block layout:fragment="script">
+		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+		
+		<script> 
+		
+	
+	
+			$(document).ready(function() {
+				
+				$('#btnSubmit').click(function(event) {
+					var startDate = $('#startDate').val();
+					var stopDate = $('#stopDate').val();
+					if (isValidDate(startDate)){
+						if(isValidDate(stopDate)){
+							$.ajax({
+								type: 'GET',
+								url: '/list/'
+								
+							});
+						}
+						else{
+							alert("Format should be dd/mm/yyyy");
+						}
+					}
+					else {
+						alert("Format should be dd/mm/yyyy");
+					}
+				});
+			});
+			
+			
+			function isValidDate(dateString){
+				
+				if ( new Date(dateString) !== "Invalid Date"){
+					if(!isNaN(new Date(dateString))){
+						return true;
+					}
+				}
+				return false;
+					
+			}
+			
+		</script>
+	
+	
+	
+	</th:block>
+-->
+
+</head>
+
+<body>
+
+
+	<div layout:fragment="content">
+
+
+			<!-- 
+				Enter Start Date: <input type="text" th:id="startDate" /><br/>
+				Enter Stop Date: <input type="text" th:id="stopDate" /><br /> 
+				<button type="submit" class="btn btn-primary pull-right" th:id="btnSubmit">Submit</button>
+		 	-->
+
+
+		<article th:each="post : ${posts}">
+			<header>
+				<h2 th:text="${post.title}">title</h2>
+				<p
+					th:text="${#calendars.format(post.postedOn,'M/dd/yyyy hh:mm:ss a')}">postedOn</p>
+			</header>
+			<section th:utext="${post.summary}">summary</section>
+			<footer>
+				<a th:href="|@{/posts/view/}${post.location}|">Read More</a>
+				<address>
+					Posted By <a th:href="|mailto:${post.author.email}|"> <span
+						th:text="|${post.author.firstName} ${post.author.lastName}|">author</span></a>
+				</address>
+			</footer>
+			<hr />
+		</article>
+
+		<p th:if="${posts.size() == 0}">
+		<div class="alert alert-warning" role="alert">No Posts Found.</div>
+		</p>
+
+	</div>
+
+</body>
+</html>
